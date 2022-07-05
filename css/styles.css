@@ -131,6 +131,12 @@ header h1 {
     background: rgba(0, 0, 0, 0.7);
 }
 
+.modal-container.show {
+ pointer-events: 0;
+ opacity: 1;
+
+}
+
 .modal {
     position: relative;
     width: 95%;
