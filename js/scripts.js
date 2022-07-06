@@ -1,5 +1,5 @@
 //Plugged in a API link into a variable
-const apiLink = "https://randomuser.me/api/?results=12";
+const apiLink = "https://randomuser.me/api/?results=12&nat=us";
 // Captured the element with the id of gallery and plugged it into a variable
 const gallery = document.getElementById("gallery");
 // Created a new div element
@@ -63,12 +63,21 @@ function generateUser(employee) {
   }
 }
 
+
+
 // Created a function that would display a modal when a given employee card was clicked and passed in the parameter employee
 function generateModal(employee) {
   modal.innerHTML = ""; //Set the innerHTMl of the variable modal to empty
-  for (let i = 0; i < employee.length; i++) {
-    //Looped through the employee array and displayed the employee information at the given index
-    const date = new Date(employee[i].dob.date);
+  for (let i = 0; i < employee.length; i++) {// Looped through the employee array and displayed the employee information at the given index
+    let date = new Date(employee[i].dob.date);//Set a variable that held the dob of the employee at the given index
+    function formatDate(date) {//Created a function that took in the date variable to format the date XX/XX/XX
+      var month = date.getMonth();
+      var day = date.getDate().toString().padStart(2, "0");
+      var year = date.getFullYear();
+      year = year.toString().substr(-2)
+      month = (month + 1).toString().padStart(2, "0");
+      return month + "/" + day + "/" + year;
+    }
     let html = `
           <div class="modal"  id="${[i]}">
               <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
@@ -88,15 +97,14 @@ function generateModal(employee) {
     }, ${employee[i].location.city}, ${employee[i].location.state}, ${
       employee[i].location.postcode
     } </p>
-                  <p class="modal-text">Birthday: ${
-                    date.getMonth() + 1
-                  }/${date.getDate()}/${date.getFullYear()}</p>
+                  <p class="modal-text">Birthday: ${formatDate(date)}</p>
           </div>`;
     document.body.appendChild(newDiv); //Appended the newDiv element to the body
     newDiv.insertAdjacentHTML("beforeend", html); //Used the variable newDiv and insertAdjacentHTMl to add the html created and position it beforeend
     modal[i].style.display = "none"; //Set the modal that was currently chosen style to display none
   }
 }
+
 
 //Created an eventListener with the variable gallery to listen for a click event
 gallery.addEventListener("click", (e) => {
@@ -111,10 +119,12 @@ gallery.addEventListener("click", (e) => {
 
 //Created an eventListener with the variable newDiv and listened for a click event
 newDiv.addEventListener("click", (e) => {
-  if (e.target.closest(".modal-close-btn")) { //Used an if statement to check for the e.targets closest modal-close-btn class
-    for (let i = 0; i < modal.length; i++) {//Created a for loop to loop through the modal chosen
+  if (e.target.closest(".modal-close-btn")) {
+    //Used an if statement to check for the e.targets closest modal-close-btn class
+    for (let i = 0; i < modal.length; i++) {
+      //Created a for loop to loop through the modal chosen
       newDiv.style.display = "none"; //Used newDiv element style to display none
-      modal[i].style.display = "none";//Got the index value of the current modal and set it to display none 
+      modal[i].style.display = "none"; //Got the index value of the current modal and set it to display none
     }
   }
 });
